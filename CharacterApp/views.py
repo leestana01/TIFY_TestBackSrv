@@ -6,6 +6,6 @@ class Create(generics.CreateAPIView):
     queryset = Character.objects.all()
     serializer_class = CharacterSerializer
 
-class RetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class ReadUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     queryset = Character.objects.all()
     serializer_class = CharacterSerializer

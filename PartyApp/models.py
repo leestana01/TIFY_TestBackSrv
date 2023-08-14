@@ -4,7 +4,16 @@ from CharacterApp.models import Character
 
 class Party(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name='parties_hosted')
-    participants = models.ManyToManyField(Character, related_name='parties')
+    participants = models.ManyToManyField(Character, through='Seat', related_name='parties')
 
-    def __str__(self):
-        return f"{self.host.username}에 의해 생성된 모임"
+    @property
+    def total_seats(self):
+        return self.seats.count()
+
+class Seat(models.Model):
+    party = models.ForeignKey(Party, related_name="seats", on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+
+
+# Party -> Seat -> Character 의 구조임
+# 이 때, Party의 participants는 Seat을 통하여 얻은 Character를 모아서 얻음.

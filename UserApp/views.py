@@ -5,7 +5,7 @@ from .serializers import UserSerializer
 
 User = get_user_model()
 
-class RetrieveUpdate(generics.RetrieveUpdateAPIView):
+class ReadUpdate(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all() # User 전체 대상
     serializer_class = UserSerializer # 사용할 Serializer
     permission_classes = [IsAuthenticated] # 로그인 사용자만 이용 가능

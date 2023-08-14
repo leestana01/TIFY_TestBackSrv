@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Invite
+from .models import Invite, Response
 
 class InviteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invite
-        fields = ['id', 'url', 'inviter', 'invitee', 'content']
+        fields = '__all__'
 
-class LetterSerializer(serializers.ModelSerializer):
+class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Invite
-        fields = ['content']
+        model = Response
+        fields = '__all__'

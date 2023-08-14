@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import Create, RetrieveDestroy, CreateContent
+from .views import Create, ReadUpdateDelete, CreateResponse
 
 urlpatterns = [
-    path('invite/', Create.as_view(), name='invite-create'),
-    path('invite/<int:pk>/', RetrieveDestroy.as_view(), name='invite-detail'),
-    path('invite/<int:pk>/write/', CreateContent.as_view(), name='content-create'),
+    path('', Create.as_view(), name='invite-create'),
+    path('<int:pk>/', ReadUpdateDelete.as_view(), name='invite-read'),
+    path('<int:pk>/respond/', CreateResponse.as_view(), name='invide-respond'),
 ]
