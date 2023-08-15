@@ -3,5 +3,5 @@ from .views import Create, ReadUpdateDelete
 
 urlpatterns = [
     path('', Create.as_view(), name='character-create'),
-    path('<int:pk>/', ReadUpdateDelete.as_view() , name='character-read')
+    path('', ReadUpdateDelete.as_view() , name='character-read')
 ]

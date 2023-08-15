@@ -4,7 +4,9 @@ from CharacterApp.models import Character
 
 class Party(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name='parties_hosted')
-    participants = models.ManyToManyField(Character, through='Seat', related_name='parties')
+    participants = models.ManyToManyField(Character, through='Seat', related_name='parties', null=True, blank=True)
+    seats_count = models.PositiveIntegerField(default=10)
+    url = models.TextField(unique=True)
 
     @property
     def total_seats(self):
@@ -12,7 +14,7 @@ class Party(models.Model):
 
 class Seat(models.Model):
     party = models.ForeignKey(Party, related_name="seats", on_delete=models.CASCADE)
-    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, null=True, blank=True, on_delete=models.CASCADE)
 
 
 # Party -> Seat -> Character 의 구조임

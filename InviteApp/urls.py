@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import Create, ReadUpdateDelete, CreateResponse
+from .views import Create, ReadUpdateDelete, CreateResponse, GetInviteByURL
 
 urlpatterns = [
-    path('', Create.as_view(), name='invite-create'),
-    path('<int:pk>/', ReadUpdateDelete.as_view(), name='invite-read'),
-    path('<int:pk>/respond/', CreateResponse.as_view(), name='invide-respond'),
+    path('<str:invite_url>/', GetInviteByURL.as_view(), name='invite-RUD'),
+    path('<str:invite_url>/response/', CreateResponse.as_view(), name='invite-response'),
+    path('party/<str:party_url>/', Create.as_view(), name='invite-create'),
 ]

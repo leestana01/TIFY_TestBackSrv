@@ -2,11 +2,12 @@ from django.db import models
 from UserApp.models import User
 
 class Invite(models.Model):
-    url = models.URLField(unique=True)
     inviter = models.ForeignKey(User, related_name='invites_sent', on_delete=models.CASCADE)
     invitee = models.ForeignKey(User, related_name='invites_received', on_delete=models.CASCADE, null=True, blank=True)
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    url = models.TextField(unique=True)
+    party_url = models.TextField(null=True)
 
     def __str__(self):
         return f"발신: {self.inviter.username} | 수신: {self.invitee.username if self.invitee else '없음'}"
