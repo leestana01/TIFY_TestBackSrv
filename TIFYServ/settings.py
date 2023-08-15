@@ -132,3 +132,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 개인 설정 --------------------------
+APPEND_SLASH = True # 슬래시를 자동으로 추가하려면 True, 그렇지 않으면 False
+AUTH_USER_MODEL = 'UserApp.User'
+
+

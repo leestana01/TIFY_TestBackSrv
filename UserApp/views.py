@@ -24,8 +24,7 @@ class Login(APIView):
             login(request, user)
             return Response({"detail": "로그인 완료"}, status=status.HTTP_200_OK)
         else:
-            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-        
+            return Response({"detail": "계정이 존재하지 않음"}, status=status.HTTP_401_UNAUTHORIZED)
 class Register(APIView):
     def post(self, request):
         username = request.data.get("username")
