@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -42,3 +42,16 @@ class Register(APIView):
         User.objects.create_user(username=username, password=password)
         
         return Response({"detail": "회원가입이 성공적으로 완료되었습니다!"}, status=status.HTTP_201_CREATED)
+
+class Logout(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({"detail": "로그아웃 완료"}, status=status.HTTP_200_OK)
+
+class DeleteAccount(APIView):
+    permission_classes = [IsAuthenticated] # 로그인 사용자만 이용 가능
+
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return Response({"detail": "회원탈퇴가 완료되었습니다."}, status=status.HTTP_200_OK)

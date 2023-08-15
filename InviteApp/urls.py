@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Create, ReadUpdateDelete, CreateResponse, GetInviteByURL
+from .views import Create, CreateResponse, GetInviteByURL
 
 urlpatterns = [
     path('<str:invite_url>/', GetInviteByURL.as_view(), name='invite-RUD'),

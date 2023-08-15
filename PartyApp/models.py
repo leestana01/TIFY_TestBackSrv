@@ -4,9 +4,9 @@ from CharacterApp.models import Character
 
 class Party(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name='parties_hosted')
-    participants = models.ManyToManyField(Character, through='Seat', related_name='parties', null=True, blank=True)
+    participants = models.ManyToManyField(Character, through='Seat', related_name='parties')
     seats_count = models.PositiveIntegerField(default=10)
-    url = models.TextField(unique=True)
+    url = models.TextField(unique=True, default="")
 
     @property
     def total_seats(self):

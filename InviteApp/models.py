@@ -6,8 +6,8 @@ class Invite(models.Model):
     invitee = models.ForeignKey(User, related_name='invites_received', on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    url = models.TextField(unique=True)
-    party_url = models.TextField(null=True)
+    url = models.TextField(unique=True, default="")
+    party_url = models.TextField(null=True, default="")
 
     def __str__(self):
         return f"발신: {self.inviter.username} | 수신: {self.invitee.username if self.invitee else '없음'}"
