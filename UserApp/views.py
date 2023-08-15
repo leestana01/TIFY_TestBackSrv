@@ -1,18 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from rest_framework.exceptions import PermissionDenied
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from .models import User
-
-class ReadUpdate(generics.RetrieveUpdateAPIView):
-    queryset = User.objects.all() # User 전체 대상
-    serializer_class = UserSerializer # 사용할 Serializer
-    permission_classes = [IsAuthenticated] # 로그인 사용자만 이용 가능
-
-    def get_object(self):
-        return self.request.user # 현재 로그인 유저 반환
 
 class Login(APIView):
     def post(self, request):
@@ -25,7 +18,16 @@ class Login(APIView):
             return Response({"detail": "로그인 완료"}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "계정이 존재하지 않음"}, status=status.HTTP_401_UNAUTHORIZED)
-class Register(APIView):
+
+class Logout(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({"detail": "로그아웃 완료"}, status=status.HTTP_200_OK)
+
+
+class UserControll(APIView):
+
+    # 회원 가입 -------------------------------------
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
@@ -41,16 +43,33 @@ class Register(APIView):
         User.objects.create_user(username=username, password=password)
         
         return Response({"detail": "회원가입이 성공적으로 완료되었습니다!"}, status=status.HTTP_201_CREATED)
+    
+    # 회원 조회(본인 계정) -------------------------------------
+    def get(self, request):
+        if not request.user.is_authenticated:
+            raise PermissionDenied("로그인이 필요합니다.")
+        
+        user = request.user
+        user_serializer = UserSerializer(user)
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
 
-class Logout(APIView):
-    def post(self, request):
-        logout(request)
-        return Response({"detail": "로그아웃 완료"}, status=status.HTTP_200_OK)
+    # 회원 수정(본인 계정) -------------------------------------
+    def put(self, request):
+        if not request.user.is_authenticated:
+            raise PermissionDenied("로그인이 필요합니다.")
+        
+        user = request.user
+        user_serializer = UserSerializer(User, data=request.data)
+        if not user_serializer.is_valid():
+            return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+        user_serializer.save()
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
 
-class DeleteAccount(APIView):
-    permission_classes = [IsAuthenticated] # 로그인 사용자만 이용 가능
-
+    # 회원 삭제(본인 계정) -------------------------------------
     def delete(self, request):
+        if not request.user.is_authenticated:
+            raise PermissionDenied("로그인이 필요합니다.")
+        
         user = request.user
         user.delete()
         return Response({"detail": "회원탈퇴가 완료되었습니다."}, status=status.HTTP_200_OK)
